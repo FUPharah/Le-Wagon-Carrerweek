@@ -33,9 +33,12 @@ class MuseumsController < ApplicationController
     if response.code != 200 || response.body.nil? || JSON.parse(response.body)['features'].empty?
       render json: { error: 'Unable to retrieve museums for the given location' }, status: :unprocessable_entity
     else
-      museums = JSON.parse(response.body)['features'].map do |feature|
-        feature['properties'].fetch('address', nil)
-      end
+      museums = JSON.parse(response.body)['features']
+        museums = museums.map do |museum|
+          museum['place_name']
+        # feature['properties'].fetch('address', nil)
+        # museum['properties']
+        end
       render json: museums
     end
   end
